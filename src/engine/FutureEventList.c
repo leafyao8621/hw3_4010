@@ -85,13 +85,18 @@ void down(Event* e) {
     if (e->left == NULL || e->right == NULL) {
         if (e->right == NULL) {
             if (e->time_stamp >= e->left->time_stamp) {
-                if ()
+                if (e->parent != NULL) {
+                    int is_left = e == e->parent->left;
                     Event* ep = e->left->parent->parent;
                     Event* er = e->left->parent->right;
                     e->parent = e;
                     e->left = NULL;
                     e->right = NULL;
                     e->parent->parent = ep;
+                    if (is_left) {
+
+                    }
+                }
             }
         } else {
             if (e->time_stamp >= e->right->time_stamp) {
