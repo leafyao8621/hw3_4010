@@ -85,7 +85,8 @@ void down(Event* e) {
     if (e->left == NULL || e->right == NULL) {
         if (e->right == NULL) {
             if (e->time_stamp >= e->left->time_stamp) {
-                
+                Event* ep = e->left->parent->parent;
+                Event* er = e->left->parent->right;
             }
         } else {
             if (e->time_stamp >= e->right->time_stamp) {
