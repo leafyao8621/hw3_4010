@@ -79,49 +79,19 @@ void up(FutureEventList* f, Event* e) {
 }
 
 void down(Event* e) {
-    printf("%lf\n", e->time_stamp);
-    if (e == NULL) {
+    if (e->left == NULL && e->right == NULL) {
         return;
     }
-    if (e->time_stamp < e->left->time_stamp &&
-        e->time_stamp < e->right->time_stamp) {
-        return;
-    }
-    if (e->right == NULL || e->left->time_stamp < e->right->time_stamp) {
-        Event* left = e->left->left != NULL ?
-        new_Event(e->left->time_stamp, e->left->type, e->left->data) : NULL;
-        Event* right = e->left->right != NULL ?
-        new_Event(e->right->time_stamp, e->right->type, e->right->data) : NULL;
-        if (e->left->left != NULL) {
-            left->parent = e;
-            free(e->left->left);
+    if (e->left == NULL || e->right == NULL) {
+        if (e->right == NULL) {
+            if (e->time_stamp >= e->left->time_stamp) {
+
+            }
         }
-        if (e->left->right != NULL) {
-            right->parent = e;
-            free(e->left->right);
-        }
-        e->left->right = e->right;
-        e->left->left = e;
-        e->left->parent = e->parent;
-        e->left = left;
-        e->right = right;
     } else {
-        Event* left = e->right->left != NULL ? new_Event(e->left->time_stamp, e->left->type, e->left->data) : NULL;
-        Event* right = e->right->right != NULL ? new_Event(e->right->time_stamp, e->right->type, e->right->data) : NULL;
-        if (e->right->left != NULL) {
-            left->parent = e;
-            free(e->right->left);
-        }
-        if (e->right->right != NULL) {
-            right->parent = e;
-            free(e->right->right);
-        }
-        e->right->right = e;
-        e->right->left = e->left;
-        e->right->parent = e->parent;
-        e->left = left;
-        e->right = right;
+
     }
+
     down(e);
 }
 
@@ -214,7 +184,6 @@ int remove_event(FutureEventList* f) {
     }
     Event* rl = f->root->left;
     Event* rr = f->root->right;
-    printf("%d\n", f->root->right == NULL);
     free(f->root);
     f->root = f->last;
     if (f->last == f->last->parent->right) {
