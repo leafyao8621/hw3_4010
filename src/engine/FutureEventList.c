@@ -3,17 +3,6 @@
 #include <math.h>
 #include "FutureEventList.h"
 
-char* d2b(int n) {
-    int bits = log2(n);
-    char* opt = malloc(bits + 1);
-    for (int i = bits - 1; i > -1; i--) {
-        opt[i] = n % 2 + '0';
-        n /= 2;
-    }
-    opt[bits] = '\0';
-    return opt;
-}
-
 void up(FutureEventList* f, Event* e) {
     if (e->parent == NULL) {
         f->root = e;
@@ -133,19 +122,16 @@ int set_last(FutureEventList* f) {
     if (f == NULL) {
         return 1;
     }
-    char* seq = d2b(f->cnt);
+    int bits = log2(f->cnt);
     Event* temp = f->root;
-    int i = 0;
-    while (seq[i] != '\0') {
-        if (seq[i] == '0') {
+    for (int i = bits - 1; i > -1; i--) {
+        if ((f->cnt >> i) % 2 == 0) {
             temp = temp->left;
         } else {
             temp = temp->right;
         }
-        i++;
     }
     f->last = temp;
-    free(seq);
     return 0;
 }
 
@@ -153,19 +139,15 @@ Event* find_par(FutureEventList* f) {
     if (f == NULL) {
         return NULL;
     }
-    char* seq = d2b(f->cnt);
-
+    int bits = log2(f->cnt);
     Event* temp = f->root;
-    int i = 0;
-    while (seq[i + 1] != '\0') {
-        if (seq[i] == '0') {
+    for (int i = bits - 1; i > 0; i--) {
+        if ((f->cnt >> i) % 2 == 0) {
             temp = temp->left;
         } else {
             temp = temp->right;
         }
-        i++;
     }
-    free(seq);
     return temp;
 }
 
