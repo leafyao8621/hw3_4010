@@ -90,6 +90,7 @@ void down(Event* e) {
                 e->parent = e;
                 e->left = NULL;
                 e->right = NULL;
+                e->parent->parent = ep;
             }
         } else {
             if (e->time_stamp >= e->right->time_stamp) {
