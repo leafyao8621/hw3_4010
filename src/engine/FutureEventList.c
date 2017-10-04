@@ -94,8 +94,18 @@ void down(Event* e) {
                     e->right = NULL;
                     e->parent->parent = ep;
                     if (is_left) {
-
+                        e->parent->parent->left = e->parent;
+                    } else {
+                        e->parent->parent->right = e->parent;
                     }
+                } else {
+                    int is_left = e == e->parent->left;
+                    Event* ep = e->left->parent->parent;
+                    Event* er = e->left->parent->right;
+                    e->parent = e;
+                    e->left = NULL;
+                    e->right = NULL;
+                    e->parent->parent = ep;
                 }
             }
         } else {
