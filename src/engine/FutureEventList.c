@@ -85,11 +85,41 @@ void down(Event* e) {
     if (e->left == NULL || e->right == NULL) {
         if (e->right == NULL) {
             if (e->time_stamp >= e->left->time_stamp) {
-
+                Event* el = e->left;
+                Event* ep = e->parent;
+                e->parent = el;
+                e->parent->left = e;
+                e->parent->right = NULL;
+                e->left = NULL;
+                e->right = NULL;
+                e->parent->parent= ep;
+            }
+        } else {
+            if (e->time_stamp >= e->right->time_stamp) {
+                Event* er = e->right;
+                Event* ep = e->parent->parent
+                e->parent = er;
+                e->parent->left = NULL;
+                e->parent->right = e;
+                e->left = NULL;
+                e->right = NULL;
+                e->parent->parent = ep;
             }
         }
     } else {
+        if (e->time_stamp >= e->left->time_stamp ||
+            e->time_stamp >= e->right->time_stamp) {
+            if (e->left->left == NULL && e->left->right == NULL &&
+                e->right->left == NULL && e->right->right == NULL) {
+                if (e->left->time_stamp < e->right->time_stamp) {
+                    Event* er = e->right;
+                    e->parent = e->left;
+                    e->parent->left = e;
+                    e->parent->right = er;
 
+                }
+            }
+        }
     }
 
     down(e);
