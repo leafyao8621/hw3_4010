@@ -1,0 +1,2 @@
+#!/bin/bash
+lcc -o lc3 src/engine/*.c src/test_app/*.c
