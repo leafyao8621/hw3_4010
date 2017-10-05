@@ -77,8 +77,8 @@ void down(Event* e) {
                 if (e->parent != NULL) {
                     int is_left = e == e->parent->left;
                     Event* ep = e->left->parent->parent;
-                    Event* er = e->left->parent->right;
-                    e->parent = e;
+                    Event* el = e->parent->left->left;
+                    e->parent = el;
                     e->left = NULL;
                     e->right = NULL;
                     e->parent->parent = ep;
@@ -87,6 +87,8 @@ void down(Event* e) {
                     } else {
                         e->parent->parent->right = e->parent;
                     }
+                    e->parent->left = el;
+                    e->parent->right = NULL;
                 } else {
                     int is_left = e == e->parent->left;
                     Event* ep = e->right->parent->parent;
