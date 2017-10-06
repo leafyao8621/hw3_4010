@@ -10,44 +10,37 @@ struct FutureEventList {
 };
 
 void up(FutureEventList* f, Event* e) {
-    if (e->parent == NULL) {
+    if (get_parent(e) == NULL) {
         f->root = e;
-    } else if (e->time_stamp < e->parent->time_stamp) {
-        Event* epp = e->parent->parent;
+    } else if (get_time_stamp(e) < get_time_stamp(get_parent(e))) {
+        Event* epp = get_parent(get_parent(e));
         int is_left;
         if (epp != NULL) {
-            is_left = e->parent == e->parent->parent->left;
+            is_left = get_parent(e) == get_left(get_parent(get_parent(e)));
         }
-        if (e == e->parent->left) {
-            Event* epr = e->parent->right;
-            Event* ep = e->parent;
-            Event* er = e->right;
-            Event* el = e->left;
-            e->left = ep;
-            e->right = epr;
-            e->left->left = el;
-            e->left->right = er;
-            e->left->parent = e;
-
-            if (e->right != NULL) {
-                e->right->parent = e;
-            }
-            if (e->left->left != NULL) {
-                e->left->left->parent = e->left;
-            }
-            if (e->left->right != NULL) {
-                e->left->right->parent = e->left;
-            }
+        if (e == get_left(get_parent(e))) {
+            Event* epr = get_right(get_parent(e));
+            Event* ep = get_parent(e);
+            Event* er = get_parent(e);
+            Event* el = get_left(e);
+            set_left(e, ep);
+            set_right(e, epr);
+            set_left(get_left(e), el);
+            set_right(get_left(e), er);
+            set_parent(get_left(e), e);
+            set_parent(get_right(e), e);
+            set_parent(get_left(get_left(e)), e->left);
+            set_parent(get_left(get_left(e)), e->left);
         } else {
-            Event* epl = e->parent->left;
-            Event* ep = e->parent;
-            Event* er = e->right;
-            Event* el = e->left;
-            e->right = ep;
-            e->left = epl;
-            e->right->left = el;
-            e->right->right = er;
-            e->right->parent = e;
+            Event* epl = get_left(get_parent(e);
+            Event* ep = get_parent(e);
+            Event* er = get_right(e);
+            Event* el = get_left(e);
+            set_right(e, ep);
+            set_left(e, epl);
+            set_left(get_right(e), el);
+            set_right(get_right(e), er);
+            set_parent(get_right(e), e);
             if (e->left != NULL) {
                 e->left->parent = e;
             }

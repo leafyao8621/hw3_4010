@@ -41,3 +41,27 @@ Event* get_left(Event* e) {
 Event* get_right(Event* e) {
     return e->right;
 }
+
+int set_parent(Event* e, Event* e1) {
+    if (e == NULL) {
+        return 1;
+    }
+    e->parent = e1;
+    return 0;
+}
+
+int set_left(Event* e, Event* e1) {
+    if (Event* e == NULL) {
+        return 1;
+    }
+    e->left = e1;
+    return 0;
+}
+
+int set_right(Event* e, Event* e1) {
+    if (Event* e == NULL) {
+        return 1;
+    }
+    e->right = e1;
+    return 0;
+}
