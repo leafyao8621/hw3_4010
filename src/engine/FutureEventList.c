@@ -99,7 +99,15 @@ void down(Event* e) {
             }
         } else {
             if (e->time_stamp >= e->right->time_stamp) {
+                if (e->parent != NULL) {
 
+                } else {
+                    e->parent = e->right;
+                    e->parent->left = e->left;
+                    e->parent->right = e;
+                    e->parent->right->left = NULL;
+                    e->parent->right->right = NULL;
+                }
             }
         }
     } else {
