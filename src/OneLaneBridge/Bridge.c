@@ -96,14 +96,14 @@ int depart(Bridge* b) {
         return 1;
     }
     Car* car = dequeue(b->enroute);
-    leave_sys(car, b->engine->time_now);
+    leave_sys(car, get_time(b->engine));
     print_Car(car);
     if (b->enroute->cnt == 0) {
         if (b->stat == NORTH) {
             if (b->south_queue->cnt != 0) {
                 b->stat = SOUTH;
                 b->time = gen_time();
-                double t = b->engine->time_now;
+                double t = get_time(b->engine);
                 Car* c = b->south_queue->head;
                 for (int i = 0; i < b->south_queue->cnt; i++) {
                     schedule_event(b->engine, new_Event(t, SMOV, b));
@@ -115,7 +115,7 @@ int depart(Bridge* b) {
                 if (b->north_queue->cnt != 0) {
                     b->stat = NORTH;
                     b->time = gen_time();
-                    double t = b->engine->time_now;
+                    double t = get_time(b->engine);
                     Car* c = b->north_queue->head;
                     for (int i = 0; i < b->north_queue->cnt; i++) {
                         schedule_event(b->engine, new_Event(t, NMOV, b));
@@ -131,7 +131,7 @@ int depart(Bridge* b) {
             if (b->north_queue->cnt != 0) {
                 b->stat = NORTH;
                 b->time = gen_time();
-                double t = b->engine->time_now;
+                double t = get_time(b->engine);
                 Car* c = b->north_queue->head;
                 for (int i = 0; i < b->north_queue->cnt; i++) {
                     schedule_event(b->engine, new_Event(t, NMOV, b));
@@ -144,7 +144,7 @@ int depart(Bridge* b) {
                 if (b->south_queue->cnt != 0) {
                     b->stat = SOUTH;
                     b->time = gen_time();
-                    double t = b->engine->time_now;
+                    double t = get_time(b->engine);
                     Car* c = b->south_queue->head;
                     for (int i = 0; i < b->south_queue->cnt; i++) {
                         schedule_event(b->engine, new_Event(t, SMOV, b));
