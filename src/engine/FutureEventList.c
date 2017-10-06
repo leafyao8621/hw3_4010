@@ -3,6 +3,12 @@
 #include <math.h>
 #include "FutureEventList.h"
 
+struct FutureEventList {
+    Event* root;
+    Event* last;
+    int cnt;
+};
+
 void up(FutureEventList* f, Event* e) {
     if (e->parent == NULL) {
         f->root = e;
@@ -223,4 +229,8 @@ int remove_event(FutureEventList* f) {
     set_last(f);
 
     return 0;
+}
+
+int get_cnt(FutureEventList* f) {
+    return f->cnt;
 }
