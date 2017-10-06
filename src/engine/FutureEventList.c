@@ -21,7 +21,7 @@ void up(FutureEventList* f, Event* e) {
         if (e == get_left(get_parent(e))) {
             Event* epr = get_right(get_parent(e));
             Event* ep = get_parent(e);
-            Event* er = get_parent(e);
+            Event* er = get_right(e);
             Event* el = get_left(e);
             set_left(e, ep);
             set_right(e, epr);
@@ -29,10 +29,10 @@ void up(FutureEventList* f, Event* e) {
             set_right(get_left(e), er);
             set_parent(get_left(e), e);
             set_parent(get_right(e), e);
-            set_parent(get_left(get_left(e)), e->left);
-            set_parent(get_left(get_left(e)), e->left);
+            set_parent(get_left(get_left(e)), get_left(e));
+            set_parent(get_right(get_left(e)), get_left(e));
         } else {
-            Event* epl = get_left(get_parent(e);
+            Event* epl = get_left(get_parent(e));
             Event* ep = get_parent(e);
             Event* er = get_right(e);
             Event* el = get_left(e);
@@ -41,26 +41,20 @@ void up(FutureEventList* f, Event* e) {
             set_left(get_right(e), el);
             set_right(get_right(e), er);
             set_parent(get_right(e), e);
-            if (e->left != NULL) {
-                e->left->parent = e;
-            }
-            if (e->right->left != NULL) {
-                e->right->left->parent = e->right;
-            }
-            if (e->right->right != NULL) {
-                e->right->right->parent = e->right;
-            }
+            set_parent(get_left(e), e);
+            set_parent(get_left(get_right(e)), get_right(e));
+            set_parent(get_right(get_right(e)), get_right(e));
         }
 
         if (epp == NULL) {
-            e->parent = NULL;
+            set_parent(e, NULL);
         } else {
             if (is_left) {
-                epp->left = e;
+                set_left(epp, e);
             } else {
-                epp->right = e;
+                set_right(epp, e);
             }
-            e->parent = epp;
+            set_parent(e, epp);
         }
         up(f, e);
     }
