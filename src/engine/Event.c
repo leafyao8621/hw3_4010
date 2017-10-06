@@ -31,14 +31,23 @@ double get_time_stamp(Event* e) {
 }
 
 Event* get_parent(Event* e) {
+    if (e == NULL) {
+        return NULL;
+    }
     return e->parent;
 }
 
 Event* get_left(Event* e) {
+    if (e == NULL) {
+        return NULL;
+    }
     return e->left;
 }
 
 Event* get_right(Event* e) {
+    if (e == NULL) {
+        return NULL;
+    }
     return e->right;
 }
 

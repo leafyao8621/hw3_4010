@@ -61,14 +61,15 @@ void up(FutureEventList* f, Event* e) {
 }
 
 void down(Event* e) {
-    if (get_left(e) == NULL && get_right(e) == NULL) {
+    if (get_left(e) == NULL) {
         return;
     }
-    if (get_left(e) == NULL || get_right(e) == NULL) {
-        if (get_right(e) == NULL) {
-            if (get_time_stamp(e) >= get_time_stamp(get_left(e))) {
-                
-            }
+    if (get_right(e) == NULL) {
+        if (get_time_stamp(e) >= get_time_stamp(get_left(e))) {
+            Event* ell = get_left(get_left(e));
+            Event* elr = get_right(get_left(e));
+            set_parent(e, el);
+
         }
     }
 
