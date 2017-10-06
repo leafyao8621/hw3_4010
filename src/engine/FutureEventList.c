@@ -61,57 +61,13 @@ void up(FutureEventList* f, Event* e) {
 }
 
 void down(Event* e) {
-    if (e->left == NULL && e->right == NULL) {
+    if (get_left(e) == NULL && get_right(e) == NULL) {
         return;
     }
-    if (e->left == NULL || e->right == NULL) {
-        if (e->right == NULL) {
-            if (e->time_stamp >= e->left->time_stamp) {
-                if (e->parent != NULL) {
-                    int is_left = e == e->parent->left;
-                    Event* ep = e->left->parent->parent;
-                    Event* el = e->parent->left->left;
-                    e->parent = el;
-                    e->left = NULL;
-                    e->right = NULL;
-                    e->parent->parent = ep;
-                    if (is_left) {
-                        e->parent->parent->left = e->parent;
-                    } else {
-                        e->parent->parent->right = e->parent;
-                    }
-                    e->parent->left = el;
-                    e->parent->right = NULL;
-                } else {
-                    e->parent = e->left;
-                    e->parent->left = e;
-                    e->parent->parent = NULL;
-                    e->parent->left->left = NULL;
-                    e->parent->left->right = NULL;
-                }
-            }
-        } else {
-            if (e->time_stamp >= e->right->time_stamp) {
-                if (e->parent != NULL) {
-
-                } else {
-                    e->parent = e->right;
-                    e->parent->left = e->left;
-                    e->parent->right = e;
-                    e->parent->right->left = NULL;
-                    e->parent->right->right = NULL;
-                }
-            }
-        }
-    } else {
-        if (e->time_stamp >= e->left->time_stamp ||
-            e->time_stamp >= e->right->time_stamp) {
-            if (e->left->left == NULL && e->left->right == NULL &&
-                e->right->left == NULL && e->right->right == NULL) {
-                if (e->left->time_stamp < e->right->time_stamp) {
-
-
-                }
+    if (get_left(e) == NULL || get_right(e) == NULL) {
+        if (get_right(e) == NULL) {
+            if (get_time_stamp(e) >= get_time_stamp(get_left(e))) {
+                
             }
         }
     }
