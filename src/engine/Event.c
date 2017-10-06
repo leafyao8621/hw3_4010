@@ -29,3 +29,15 @@ Event* new_Event(double time_stamp, int type, void* data) {
 double get_time_stamp(Event* e) {
     return e->time_stamp;
 }
+
+Event* get_parent(Event* e) {
+    return e->parent;
+}
+
+Event* get_left(Event* e) {
+    return e->left;
+}
+
+Event* get_right(Event* e) {
+    return e->right;
+}
