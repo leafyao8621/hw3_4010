@@ -151,6 +151,19 @@ void down(Event* e) {
             } else {
                 er = get_right(get_right(get_parent(e)));
             }
+            set_right(get_parent(e), e);
+            set_left(e, erl);
+            set_right(e, err);
+            set_parent(get_right(e), e);
+            set_parent(get_left(e), e);
+            set_parent(get_parent(e), ep);
+            if (is_left != 2) {
+                if (is_left) {
+                    set_left(get_parent(get_parent(e))) = get_parent(e);
+                } else {
+                    set_right(get_parent(get_parent(e))) = get_parent(e);
+                }
+            }
         }
     }
     down(e);
