@@ -6,13 +6,13 @@ Point* start;
 Engine* engine;
 
 int handle(Engine* engine, Event* event) {
-    printf("%lf\n", event->time_stamp);
-    if (event->type == 1) {
-        add(start, (Point*) event->data);
+    printf("%lf\n", get_time_stamp(event));
+    if (get_type(event) == 1) {
+        add(start, (Point*) get_data(event));
     } else {
-        sub(start, (Point*) event->data);
+        sub(start, (Point*) get_data(event));
     }
-    free_Point(event->data);
+    free_Point(get_data(event));
     //Event* newe = new_Event(event->time_stamp + 3, event->type, new_Point(1, 1));
     //schedule_event(engine, newe);
     printf("%d, %d\n", start->x, start->y);
@@ -38,14 +38,6 @@ int main() {
     schedule_event(engine, e5);
     schedule_event(engine, e6);
     schedule_event(engine, e7);
-    schedule_event(engine, new_Event(2, 1, new_Point(0.22, 0.1)));
-    schedule_event(engine, new_Event(7, 1, new_Point(0.22, 0.1)));
-    schedule_event(engine, new_Event(1.1, 1, new_Point(0.22, 0.1)));
-    schedule_event(engine, new_Event(7, 1, new_Point(0.22, 0.1)));
-    schedule_event(engine, new_Event(7, 1, new_Point(0.22, 0.1)));
-    schedule_event(engine, new_Event(7, 1, new_Point(0.22, 0.1)));
-    schedule_event(engine, new_Event(7, 1, new_Point(0.22, 0.1)));
-    schedule_event(engine, new_Event(0.1, 1, new_Point(0.22, 0.1)));
-    printf("%lf\n", engine->list->last->parent->parent->right->parent->parent->right->right->parent->left->parent->parent->parent->left->parent->right->left->left->parent->right->parent->time_stamp);
-    //main_loop(engine);
+
+    main_loop(engine);
 }

@@ -76,6 +76,7 @@ void down(FutureEventList* f, Event* e) {
             Event* el;
             if (is_left == 2) {
                 el = get_left(f->root);
+                f->root = el;
             } else if (is_left) {
                 el = get_left(get_left(get_parent(e)));
             } else {
@@ -98,7 +99,7 @@ void down(FutureEventList* f, Event* e) {
             }
         }
     } else {
-        if (get_time_stamp(get_left(e)) < get_time_stamp(get_right(e))) {
+        if (get_time_stamp(get_left(e)) <= get_time_stamp(get_right(e))) {
             Event* ell = get_left(get_left(e));
             Event* elr = get_right(get_left(e));
             Event* ep = get_parent(e);
@@ -109,6 +110,7 @@ void down(FutureEventList* f, Event* e) {
             Event* el;
             if (is_left == 2) {
                 el = get_left(f->root);
+                f->root = el;
             } else if (is_left) {
                 el = get_left(get_left(get_parent(e)));
             } else {
@@ -146,6 +148,7 @@ void down(FutureEventList* f, Event* e) {
             Event* er;
             if (is_left == 2) {
                 er = get_right(f->root);
+                f->root = er;
             } else if (is_left) {
                 er = get_right(get_left(get_parent(e)));
             } else {
@@ -258,8 +261,8 @@ int remove_event(FutureEventList* f) {
     } else {
         set_left(get_parent(f->last), NULL);
     }
-    f->root->left = rl;
-    f->root->right = rr;
+    set_left(f->root, rl);
+    set_right(f->root, rr);
 
     down(f, f->root);
     f->cnt--;
@@ -270,4 +273,8 @@ int remove_event(FutureEventList* f) {
 
 int get_cnt(FutureEventList* f) {
     return f->cnt;
+}
+
+Event* get_root(FutureEventList* f) {
+    return f->root;
 }

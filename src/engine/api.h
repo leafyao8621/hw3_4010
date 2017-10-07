@@ -8,3 +8,6 @@ int schedule_event(Engine* engine, Event* e);
 Engine* new_Engine(double duration);
 int handle(Engine* engine, Event* event);
 int main_loop(Engine* e);
+double get_time_stamp(Event* e);
+void* get_data(Event* e);
+int get_type(Event* e);

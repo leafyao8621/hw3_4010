@@ -30,6 +30,14 @@ double get_time_stamp(Event* e) {
     return e->time_stamp;
 }
 
+int get_type(Event* e) {
+    return e->type;
+}
+
+void* get_data(Event* e) {
+    return e->data;
+}
+
 Event* get_parent(Event* e) {
     if (e == NULL) {
         return NULL;
