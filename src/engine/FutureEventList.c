@@ -73,6 +73,14 @@ void down(Event* e) {
             if (ep != NULL) {
                 is_left = e == get_left(ep);
             }
+            Event* el;
+            if (is_left == 2) {
+                el = get_left(f->root);
+            } else if (is_left) {
+                el = get_left(get_left(get_parent(e)));
+            } else {
+                el = get_left(get_right(get_parent(e)));
+            }
             set_parent(e, el);
             set_right(get_parent(e), NULL);
             set_left(get_parent(e), e);
@@ -98,6 +106,14 @@ void down(Event* e) {
             if (ep != NULL) {
                 is_left = e == get_left(ep);
             }
+            Event* el;
+            if (is_left == 2) {
+                el = get_left(f->root);
+            } else if (is_left) {
+                el = get_left(get_left(get_parent(e)));
+            } else {
+                el = get_left(get_right(get_parent(e)));
+            }
             set_parent(e, el);
             if (is_left == 2) {
                 set_right(get_parent(e), NULL);
@@ -120,7 +136,7 @@ void down(Event* e) {
                 }
             }
         } else {
-            
+
         }
     }
     down(e);
