@@ -258,8 +258,8 @@ int remove_event(FutureEventList* f) {
     } else {
         set_left(get_parent(f->last), NULL);
     }
-    set_left(f->root, rl);
-    set_right(f->root, rr);
+    f->root->left = rl;
+    f->root->right = rr;
 
     down(f, f->root);
     f->cnt--;
