@@ -116,7 +116,7 @@ void down(Event* e) {
             }
             set_parent(e, el);
             if (is_left == 2) {
-                set_right(get_parent(e), NULL);
+                set_right(get_parent(e), get_right(f->root));
             } else if (is_left) {
                 set_right(get_parent(e), get_right(get_left(get_parent(e))));
             } else {
@@ -136,7 +136,8 @@ void down(Event* e) {
                 }
             }
         } else {
-
+            Event* erl = get_left(get_right(e));
+            Event* err = get_right(get_right(e));
         }
     }
     down(e);
