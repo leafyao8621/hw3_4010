@@ -138,6 +138,19 @@ void down(Event* e) {
         } else {
             Event* erl = get_left(get_right(e));
             Event* err = get_right(get_right(e));
+            Event* ep = get_parent(e);
+            int is_left = 2;
+            if (ep != NULL) {
+                is_left = e == get_left(ep);
+            }
+            Event* er;
+            if (is_left == 2) {
+                er = get_right(f->root);
+            } else if (is_left) {
+                er = get_right(get_left(get_parent(e)));
+            } else {
+                er = get_right(get_right(get_parent(e)));
+            }
         }
     }
     down(e);
