@@ -89,8 +89,40 @@ void down(Event* e) {
                 }
             }
         }
+    } else {
+        if (get_time_stamp(get_left(e)) < get_time_stamp(get_right(e))) {
+            Event* ell = get_left(get_left(e));
+            Event* elr = get_right(get_left(e));
+            Event* ep = get_parent(e);
+            int is_left = 2;
+            if (ep != NULL) {
+                is_left = e == get_left(ep);
+            }
+            set_parent(e, el);
+            if (is_left == 2) {
+                set_right(get_parent(e), NULL);
+            } else if (is_left) {
+                set_right(get_parent(e), get_right(get_left(get_parent(e))));
+            } else {
+                set_right(get_parent(e), get_right(get_right(get_parent(e))));
+            }
+            set_left(get_parent(e), e);
+            set_left(e, ell);
+            set_right(e, elr);
+            set_parent(get_left(e), e);
+            set_parent(get_right(e), e);
+            set_parent(get_parent(e), ep);
+            if (is_left != 2) {
+                if (is_left) {
+                    set_left(get_parent(get_parent(e))) = get_parent(e);
+                } else {
+                    set_right(get_parent(get_parent(e))) = get_parent(e);
+                }
+            }
+        } else {
+            
+        }
     }
-
     down(e);
 }
 
