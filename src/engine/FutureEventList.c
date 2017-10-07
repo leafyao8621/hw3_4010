@@ -60,7 +60,7 @@ void up(FutureEventList* f, Event* e) {
     }
 }
 
-void down(Event* e) {
+void down(FutureEventList* f, Event* e) {
     if (get_left(e) == NULL) {
         return;
     }
@@ -91,9 +91,9 @@ void down(Event* e) {
             set_parent(get_parent(e), ep);
             if (is_left != 2) {
                 if (is_left) {
-                    set_left(get_parent(get_parent(e))) = get_parent(e);
+                    set_left(get_parent(get_parent(e)), get_parent(e));
                 } else {
-                    set_right(get_parent(get_parent(e))) = get_parent(e);
+                    set_right(get_parent(get_parent(e)), get_parent(e));
                 }
             }
         }
@@ -130,9 +130,9 @@ void down(Event* e) {
             set_parent(get_parent(e), ep);
             if (is_left != 2) {
                 if (is_left) {
-                    set_left(get_parent(get_parent(e))) = get_parent(e);
+                    set_left(get_parent(get_parent(e)), get_parent(e));
                 } else {
-                    set_right(get_parent(get_parent(e))) = get_parent(e);
+                    set_right(get_parent(get_parent(e)), get_parent(e));
                 }
             }
         } else {
@@ -159,14 +159,14 @@ void down(Event* e) {
             set_parent(get_parent(e), ep);
             if (is_left != 2) {
                 if (is_left) {
-                    set_left(get_parent(get_parent(e))) = get_parent(e);
+                    set_left(get_parent(get_parent(e)), get_parent(e));
                 } else {
-                    set_right(get_parent(get_parent(e))) = get_parent(e);
+                    set_right(get_parent(get_parent(e)), get_parent(e));
                 }
             }
         }
     }
-    down(e);
+    down(f, e);
 }
 
 int set_last(FutureEventList* f) {
@@ -177,9 +177,9 @@ int set_last(FutureEventList* f) {
     Event* temp = f->root;
     for (int i = bits - 1; i > -1; i--) {
         if ((f->cnt >> i) % 2 == 0) {
-            temp = temp->left;
+            temp = get_left(temp);
         } else {
-            temp = temp->right;
+            temp = get_right(temp);
         }
     }
     f->last = temp;
@@ -194,9 +194,9 @@ Event* find_par(FutureEventList* f) {
     Event* temp = f->root;
     for (int i = bits - 1; i > 0; i--) {
         if ((f->cnt >> i) % 2 == 0) {
-            temp = temp->left;
+            temp = get_left(temp);
         } else {
-            temp = temp->right;
+            temp = get_right(temp);
         }
     }
     return temp;
@@ -225,11 +225,11 @@ int schedule(FutureEventList* f, Event* e) {
     } else {
         f->cnt++;
         Event* par = find_par(f);
-        e->parent = par;
-        if (par->left == NULL) {
-            par->left = e;
+        set_parent(e, par);
+        if (get_left(par) == NULL) {
+            set_left(par, e);
         } else {
-            par->right = e;
+            set_right(par, e);
         }
         up(f, e);
         set_last(f);
@@ -249,19 +249,19 @@ int remove_event(FutureEventList* f) {
         f->cnt = 0;
         return 0;
     }
-    Event* rl = f->root->left;
-    Event* rr = f->root->right;
+    Event* rl = get_left(f->root);
+    Event* rr = get_right(f->root);
     free(f->root);
     f->root = f->last;
-    if (f->last == f->last->parent->right) {
-        f->last->parent->right = NULL;
+    if (f->last == get_right(get_parent(f->last))) {
+        set_right(get_parent(f->last), NULL);
     } else {
-        f->last->parent->left = NULL;
+        set_left(get_parent(f->last), NULL);
     }
     f->root->left = rl;
     f->root->right = rr;
 
-    down(f->root);
+    down(f, f->root);
     f->cnt--;
     set_last(f);
 
