@@ -38,6 +38,5 @@ int main() {
     schedule_event(engine, e5);
     schedule_event(engine, e6);
     schedule_event(engine, e7);
-
     main_loop(engine);
 }

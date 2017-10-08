@@ -65,107 +65,109 @@ void down(FutureEventList* f, Event* e) {
         return;
     }
     if (get_right(e) == NULL) {
-        if (get_time_stamp(e) >= get_time_stamp(get_left(e))) {
-            Event* ell = get_left(get_left(e));
-            Event* elr = get_right(get_left(e));
-            Event* ep = get_parent(e);
-            int is_left = 2;
-            if (ep != NULL) {
-                is_left = e == get_left(ep);
+        if (get_time_stamp(e) < get_time_stamp(get_left(e))) {
+            if (get_parent(e) == NULL) {
+                f->root = e;
             }
-            Event* el;
-            if (is_left == 2) {
-                el = get_left(f->root);
-                f->root = el;
-            } else if (is_left) {
-                el = get_left(get_left(get_parent(e)));
+            return;
+        }
+    } else {
+
+        if (get_time_stamp(e) < get_time_stamp(get_left(e)) &&
+            get_time_stamp(e) < get_time_stamp(get_right(e))) {
+            if (get_parent(e) == NULL) {
+                f->root = e;
+            }
+            return;
+        }
+    }
+    int left = 0;
+    if (get_right(e) == NULL) {
+        left = 1;
+    } else {
+        if (get_time_stamp(get_left(e)) <= get_time_stamp(get_right(e))) {
+            left = 1;
+        }
+    }
+    printf("%d\n", left);
+    if (left) {
+        Event* ell = get_left(get_left(e));
+        Event* elr = get_right(get_left(e));
+        Event* ep = get_parent(e);
+        int is_left = 2;
+        if (ep != NULL) {
+            is_left = e == get_left(ep);
+        }
+        Event* el;
+        if (is_left == 2) {
+            el = get_left(f->last);
+            f->root = el;
+        } else if (is_left) {
+            el = get_left(get_left(get_parent(e)));
+        } else {
+            el = get_left(get_right(get_parent(e)));
+        }
+        Event* er;
+        if (is_left == 2) {
+            er = get_right(f->last);
+        } else if (is_left) {
+            er = get_right(get_left(get_parent(e)));
+        } else {
+            er = get_right(get_right(get_parent(e)));
+        }
+        set_parent(e, el);
+        set_right(get_parent(e), er);
+        set_left(get_parent(e), e);
+        set_left(e, ell);
+        set_right(e, elr);
+        set_parent(get_left(e), e);
+        set_parent(get_right(e), e);
+        set_parent(get_parent(e), ep);
+        if (is_left != 2) {
+            if (is_left) {
+                set_left(get_parent(get_parent(e)), get_parent(e));
             } else {
-                el = get_left(get_right(get_parent(e)));
-            }
-            set_parent(e, el);
-            set_right(get_parent(e), NULL);
-            set_left(get_parent(e), e);
-            set_left(e, ell);
-            set_right(e, elr);
-            set_parent(get_left(e), e);
-            set_parent(get_right(e), e);
-            set_parent(get_parent(e), ep);
-            if (is_left != 2) {
-                if (is_left) {
-                    set_left(get_parent(get_parent(e)), get_parent(e));
-                } else {
-                    set_right(get_parent(get_parent(e)), get_parent(e));
-                }
+                set_right(get_parent(get_parent(e)), get_parent(e));
             }
         }
     } else {
-        if (get_time_stamp(get_left(e)) <= get_time_stamp(get_right(e))) {
-            Event* ell = get_left(get_left(e));
-            Event* elr = get_right(get_left(e));
-            Event* ep = get_parent(e);
-            int is_left = 2;
-            if (ep != NULL) {
-                is_left = e == get_left(ep);
-            }
-            Event* el;
-            if (is_left == 2) {
-                el = get_left(f->root);
-                f->root = el;
-            } else if (is_left) {
-                el = get_left(get_left(get_parent(e)));
-            } else {
-                el = get_left(get_right(get_parent(e)));
-            }
-            set_parent(e, el);
-            if (is_left == 2) {
-                set_right(get_parent(e), get_right(f->root));
-            } else if (is_left) {
-                set_right(get_parent(e), get_right(get_left(get_parent(e))));
-            } else {
-                set_right(get_parent(e), get_right(get_right(get_parent(e))));
-            }
-            set_left(get_parent(e), e);
-            set_left(e, ell);
-            set_right(e, elr);
-            set_parent(get_left(e), e);
-            set_parent(get_right(e), e);
-            set_parent(get_parent(e), ep);
-            if (is_left != 2) {
-                if (is_left) {
-                    set_left(get_parent(get_parent(e)), get_parent(e));
-                } else {
-                    set_right(get_parent(get_parent(e)), get_parent(e));
-                }
-            }
+        Event* erl = get_left(get_right(e));
+        Event* err = get_right(get_right(e));
+        Event* ep = get_parent(e);
+        int is_left = 2;
+        if (ep != NULL) {
+            is_left = e == get_left(ep);
+        }
+        Event* el;
+        if (is_left == 2) {
+            el = get_left(f->last);
+        } else if (is_left) {
+            el = get_left(get_left(get_parent(e)));
         } else {
-            Event* erl = get_left(get_right(e));
-            Event* err = get_right(get_right(e));
-            Event* ep = get_parent(e);
-            int is_left = 2;
-            if (ep != NULL) {
-                is_left = e == get_left(ep);
-            }
-            Event* er;
-            if (is_left == 2) {
-                er = get_right(f->root);
-                f->root = er;
-            } else if (is_left) {
-                er = get_right(get_left(get_parent(e)));
+            el = get_left(get_right(get_parent(e)));
+        }
+        Event* er;
+        if (is_left == 2) {
+            er = get_right(f->last);
+            f->root = er;
+        } else if (is_left) {
+            er = get_right(get_left(get_parent(e)));
+        } else {
+            er = get_right(get_right(get_parent(e)));
+        }
+        set_parent(e, er);
+        set_right(get_parent(e), e);
+        set_left(get_parent(e), el);
+        set_left(e, erl);
+        set_right(e, err);
+        set_parent(get_left(e), e);
+        set_parent(get_right(e), e);
+        set_parent(get_parent(e), ep);
+        if (is_left != 2) {
+            if (is_left) {
+                set_left(get_parent(get_parent(e)), get_parent(e));
             } else {
-                er = get_right(get_right(get_parent(e)));
-            }
-            set_right(get_parent(e), e);
-            set_left(e, erl);
-            set_right(e, err);
-            set_parent(get_right(e), e);
-            set_parent(get_left(e), e);
-            set_parent(get_parent(e), ep);
-            if (is_left != 2) {
-                if (is_left) {
-                    set_left(get_parent(get_parent(e)), get_parent(e));
-                } else {
-                    set_right(get_parent(get_parent(e)), get_parent(e));
-                }
+                set_right(get_parent(get_parent(e)), get_parent(e));
             }
         }
     }
@@ -254,20 +256,20 @@ int remove_event(FutureEventList* f) {
     }
     Event* rl = get_left(f->root);
     Event* rr = get_right(f->root);
-    free(f->root);
-    f->root = f->last;
+
     if (f->last == get_right(get_parent(f->last))) {
         set_right(get_parent(f->last), NULL);
     } else {
         set_left(get_parent(f->last), NULL);
     }
-    set_left(f->root, rl);
-    set_right(f->root, rr);
-
-    down(f, f->root);
+    set_left(f->last, rl);
+    set_right(f->last, rr);
+    set_parent(f->last, NULL);
+    free(f->root);
+    down(f, f->last);
     f->cnt--;
     set_last(f);
-
+    //printf("%lf\n", get_time_stamp(f->last));
     return 0;
 }
 
