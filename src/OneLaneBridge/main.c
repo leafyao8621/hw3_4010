@@ -12,7 +12,8 @@
 #define SMOV 3
 #define DEP 4
 
-double rate;
+double nrate;
+double srate;
 double tlb;
 double tub;
 double dlb;
@@ -20,50 +21,52 @@ double dub;
 Bridge* b;
 
 double gen_time() {
-    double n = ((double) rand()) / ((double) RAND_MAX);
-    return tlb + n * (tub - tlb);
+    return rand_unif(tlb, tub);
 }
 
 double gen_delay() {
-    double n = ((double) rand()) / ((double) RAND_MAX);
-    return dlb + n * (dub - dlb);
+    return rand_unif(dlb, dub);
 }
 
-double gen_int_arr() {
-    double n = ((double) rand()) / ((double) RAND_MAX);
-    return -rate * (log(1 - n));
+double gen_n_int_arr() {
+    return rand_exp(nrate);
+}
+
+double gen_s_int_arr() {
+    return rand_exp(srate);
 }
 
 int handle(Engine* engine, Event* event) {
     if (engine == NULL || event == NULL) {
         return 1;
     }
-    if (event->type == NARR) {
+    if (get_type(event) == NARR) {
         arrive(b, NORTH);
-    } else if (event->type == SARR) {
+    } else if (get_type(event) == SARR) {
         arrive(b, SOUTH);
-    } else if (event->type == NMOV) {
+    } else if (get_type(event) == NMOV) {
         move(b, NORTH);
-    } else if (event->type == SMOV) {
+    } else if (get_type(event) == SMOV) {
         move(b, SOUTH);
-    } else if (event->type == DEP) {
+    } else if (get_type(event) == DEP) {
         depart(b);
     }
     return 0;
 }
 
 int main(int argc, const char** argv) {
-    if (argc < 7) {
+    if (argc < 8) {
         puts("Not enough # of arguments.");
         return 1;
     }
-    rate = atof(argv[1]);
-    tlb = atof(argv[2]);
-    tub = atof(argv[3]);
-    dlb = atof(argv[4]);
-    dub = atof(argv[5]);
-    double dur = atof(argv[6]);
-    if (rate <= 0 || tlb <= 0 || tub < 0 || tlb >= tub ||
+    nrate = atof(argv[1]);
+    srate = atof(argv[2]);
+    tlb = atof(argv[3]);
+    tub = atof(argv[4]);
+    dlb = atof(argv[5]);
+    dub = atof(argv[6]);
+    double dur = atof(argv[7]);
+    if (nrate <= 0 || srate <= 0 || tlb <= 0 || tub < 0 || tlb >= tub ||
         dlb <= 0 || dub < 0 || dlb >= dub || dur <= 0) {
         puts("Invalid argument(s)!");
         return 1;
@@ -73,13 +76,13 @@ int main(int argc, const char** argv) {
     srand(time(NULL));
     double t = 0;
     while (t < dur) {
-        t += gen_int_arr();
-        schedule_event(e, new_Event(t, NARR, b));
+        t += gen_n_int_arr();
+        schedule_event(e, t, NARR, b);
     }
     t = 0;
     while (t < dur) {
-        t += gen_int_arr();
-        schedule_event(e, new_Event(t, SARR, b));
+        t += gen_s_int_arr();
+        schedule_event(e, t, SARR, b);
     }
     puts("Dir,Time_Arr,Time_Mov,Time_Out,TIQ,TIS");
     main_loop(e);

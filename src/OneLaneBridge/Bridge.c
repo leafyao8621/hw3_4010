@@ -36,10 +36,10 @@ int arrive(Bridge* b, int dir) {
     if (b->stat == EMPTY) {
         b->time = gen_time();
         if (dir == NORTH) {
-            schedule_event(b->engine, new_Event(get_time(b->engine), NMOV, b));
+            schedule_event(b->engine, get_time(b->engine), NMOV, b);
             b->stat = NORTH;
         } else {
-            schedule_event(b->engine, new_Event(get_time(b->engine), SMOV, b));
+            schedule_event(b->engine, get_time(b->engine), SMOV, b);
             b->stat = SOUTH;
         }
     } else if (b->stat == dir) {
@@ -51,10 +51,10 @@ int arrive(Bridge* b, int dir) {
                     time_mov += car->delay;
                     car = car->next;
                 }
-                time_mov -= (b->engine->time_now -
-                     b->enroute->tail->time_start);
-                schedule_event(b->engine, new_Event(get_time(b->engine) +
-                     time_mov, NMOV, b));
+                time_mov -= (get_time(b->engine) -
+                    b->enroute->tail->time_start);
+                schedule_event(b->engine, get_time(b->engine) +
+                time_mov, NMOV, b);
                 c->delay = gen_delay();
             }
         } else {
@@ -65,8 +65,8 @@ int arrive(Bridge* b, int dir) {
                     time_mov += car->delay;
                     car = car->next;
                 }
-                schedule_event(b->engine, new_Event(get_time(b->engine) +
-                     time_mov, SMOV, b));
+                schedule_event(b->engine, get_time(b->engine) +
+                    time_mov, SMOV, b);
                 c->delay = gen_delay();
             }
         }
@@ -87,7 +87,7 @@ int move(Bridge* b, int dir) {
     b->stat = dir;
     enqueue(b->enroute, c);
     leave_queue(c, get_time(b->engine));
-    schedule_event(b->engine, new_Event(get_time(b->engine) + b->time, DEP, b));
+    schedule_event(b->engine, get_time(b->engine) + b->time, DEP, b);
     return 0;
 }
 
@@ -106,7 +106,7 @@ int depart(Bridge* b) {
                 double t = get_time(b->engine);
                 Car* c = b->south_queue->head;
                 for (int i = 0; i < b->south_queue->cnt; i++) {
-                    schedule_event(b->engine, new_Event(t, SMOV, b));
+                    schedule_event(b->engine, t, SMOV, b);
                     c->delay = gen_delay();
                     t += c->delay;
                     c = c->next;
@@ -118,7 +118,7 @@ int depart(Bridge* b) {
                     double t = get_time(b->engine);
                     Car* c = b->north_queue->head;
                     for (int i = 0; i < b->north_queue->cnt; i++) {
-                        schedule_event(b->engine, new_Event(t, NMOV, b));
+                        schedule_event(b->engine, t, NMOV, b);
                         c->delay = gen_delay();
                         t += c->delay;
                         c = c->next;
@@ -134,7 +134,7 @@ int depart(Bridge* b) {
                 double t = get_time(b->engine);
                 Car* c = b->north_queue->head;
                 for (int i = 0; i < b->north_queue->cnt; i++) {
-                    schedule_event(b->engine, new_Event(t, NMOV, b));
+                    schedule_event(b->engine, t, NMOV, b);
                     c->delay = gen_delay();
                     t += c->delay;
                     c = c->next;
@@ -147,7 +147,7 @@ int depart(Bridge* b) {
                     double t = get_time(b->engine);
                     Car* c = b->south_queue->head;
                     for (int i = 0; i < b->south_queue->cnt; i++) {
-                        schedule_event(b->engine, new_Event(t, SMOV, b));
+                        schedule_event(b->engine, t, SMOV, b);
                         c->delay = gen_delay();
                         t += c->delay;
                         c = c->next;
@@ -167,6 +167,6 @@ int free_Bridge(Bridge* b) {
     free_Queue(b->north_queue);
     free_Queue(b->south_queue);
     free_Queue(b->enroute);
-    free(b->engine->list);
-    free(b->engine);
+    free_Engine(b->engine);
+    free(b);
 }
