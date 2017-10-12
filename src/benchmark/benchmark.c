@@ -35,9 +35,10 @@ int main(int argc, char** argv) {
     clock_t start = clock();
     /*hold operation*/
     for (int i = 0; i < 100000; i++) {
+        remove_event(f);
         schedule(f, new_Event(get_time_stamp(get_root(f)) + rand_exp(1), 1,
         NULL));
-        remove_event(f);
+        
     }
     clock_t end = clock();
     double t_time = ((double) end - (double) start) / CLOCKS_PER_SEC;
