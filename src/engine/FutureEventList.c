@@ -290,3 +290,14 @@ int get_cnt(FutureEventList* f) {
 Event* get_root(FutureEventList* f) {
     return f->root;
 }
+
+int free_FutureEventList(FutureEventList* f) {
+    if (f == NULL) {
+        return 1;
+    }
+    for (int i = 0; i < f->cnt; i++) {
+        remove_event(f);
+    }
+    free(f);
+    return 0;
+}

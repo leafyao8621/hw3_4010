@@ -1,0 +1,2 @@
+#!/bin/bash
+gcc -o bench src/benchmark/benchmark.c src/engine/FutureEventList.c src/engine/Event.c src/sample/engine.c -lm
