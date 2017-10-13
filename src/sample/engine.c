@@ -44,7 +44,7 @@ struct Event *Remove (void);
 struct Event *Remove (void)
 {
     struct Event *e;
-    
+
     if (FEL.Next==NULL) return (NULL);
     e = FEL.Next;		// remove first event in list
     FEL.Next = e->Next;
@@ -55,7 +55,7 @@ struct Event *Remove (void)
 void PrintList (void)
 {
     struct Event *p;
-    
+
     printf ("Event List: ");
     for (p=FEL.Next; p!=NULL; p=p->Next) {
         printf ("%f ", p->timestamp);
@@ -94,6 +94,9 @@ void Schedule (double ts, void *data)
 	q->Next = e;
 }
 
+double get_time(struct Event* e) {
+	return e->timestamp;
+}
 // Function to execute simulation up to a specified time (EndTime)
 // void RunSim (double EndTime)
 // {

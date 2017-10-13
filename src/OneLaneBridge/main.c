@@ -84,7 +84,7 @@ int main(int argc, const char** argv) {
         t += gen_s_int_arr();
         schedule_event(e, t, SARR, b);
     }
-    puts("Dir,Time_Arr,Time_Mov,Time_Out,TIQ,TIS");
+    puts("Dir,TimeArr,TimeMov,TimeOut,TIQ,TIS");
     main_loop(e);
     free_Bridge(b);
     return 0;

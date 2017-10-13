@@ -33,4 +33,5 @@ int main() {
     schedule_event(engine, 0.5, 1, new_Point(4, 4));
     schedule_event(engine, 1, 1, new_Point(5, 5));
     main_loop(engine);
+    free_Engine(engine);
 }

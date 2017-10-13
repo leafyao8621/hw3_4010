@@ -1,0 +1,9 @@
+schedule_event(engine, 2.3, 1, new_Point(1, 1));
+schedule_event(engine, 3, 1, new_Point(2, 2));
+schedule_event(engine, 2, 1, new_Point(3, 3));
+schedule_event(engine, 4, 1, new_Point(4, 4));
+schedule_event(engine, 3, 1, new_Point(1, 1));
+schedule_event(engine, 1, 1, new_Point(3, 3));
+schedule_event(engine, 6, 1, new_Point(3, 3));
+schedule_event(engine, 0.5, 1, new_Point(4, 4));
+schedule_event(engine, 1, 1, new_Point(5, 5));

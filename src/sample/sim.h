@@ -27,3 +27,4 @@ double CurrentTime (void);
 //  Event handler function: called to process an event
 //void EventHandler (void *data);
 struct Event *Remove (void);
+double get_time(struct Event* e);

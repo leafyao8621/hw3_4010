@@ -1,0 +1,2 @@
+#!/bin/bash
+gcc -g src/engine/*.c src/OneLaneBridge/*.c -lm

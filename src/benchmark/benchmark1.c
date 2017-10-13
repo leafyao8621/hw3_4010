@@ -45,8 +45,9 @@ int main(int argc, char** argv) {
     printf("%d,%lf,", init_size, t_time);
     start = clock();
     for (int i = 0; i < 100000; i++) {
-        free(Remove());
-        Schedule(CurrentTime() + rand_exp(1), NULL);
+        Event* e = Remove();
+        Schedule(get_time(e) + rand_exp(1), NULL);
+        free(e);
     }
     end = clock();
     t_time = ((double) end - (double) start) / CLOCKS_PER_SEC;
