@@ -9,20 +9,27 @@ struct FutureEventList {
     int cnt;
 };
 
+/*Implementation of heapify up*/
 void up(FutureEventList* f, Event* e) {
+    //exit if the node is root and resets the root
+    //up if e's time stamp is strictly smaller
     if (get_parent(e) == NULL) {
         f->root = e;
     } else if (get_time_stamp(e) < get_time_stamp(get_parent(e))) {
         Event* epp = get_parent(get_parent(e));
         int is_left;
+        //checks whether e's parent is the left of its parent
         if (epp != NULL) {
             is_left = get_parent(e) == get_left(get_parent(get_parent(e)));
         }
         if (e == get_left(get_parent(e))) {
+            //stores nodes in temperary variables
+            //p in variable means parent, r means right, l means left
             Event* epr = get_right(get_parent(e));
             Event* ep = get_parent(e);
             Event* er = get_right(e);
             Event* el = get_left(e);
+            //sets fields
             set_left(e, ep);
             set_right(e, epr);
             set_left(get_left(e), el);
@@ -32,10 +39,13 @@ void up(FutureEventList* f, Event* e) {
             set_parent(get_left(get_left(e)), get_left(e));
             set_parent(get_right(get_left(e)), get_left(e));
         } else {
+            //stores nodes in temperary variables
+            //p in variable means parent, r means right, l means left
             Event* epl = get_left(get_parent(e));
             Event* ep = get_parent(e);
             Event* er = get_right(e);
             Event* el = get_left(e);
+            //set fields
             set_right(e, ep);
             set_left(e, epl);
             set_left(get_right(e), el);
@@ -45,7 +55,7 @@ void up(FutureEventList* f, Event* e) {
             set_parent(get_left(get_right(e)), get_right(e));
             set_parent(get_right(get_right(e)), get_right(e));
         }
-
+        //check for edge cases and sets fields for e's parent's parent
         if (epp == NULL) {
             set_parent(e, NULL);
         } else {
@@ -60,7 +70,10 @@ void up(FutureEventList* f, Event* e) {
     }
 }
 
+/*Implementation of heapify up*/
 void down(FutureEventList* f, Event* e) {
+    //stopping conditions
+    //resets root when the event itself is the root
     if (get_left(e) == NULL) {
         if (get_parent(e) == NULL) {
             f->root = e;
@@ -83,6 +96,7 @@ void down(FutureEventList* f, Event* e) {
             return;
         }
     }
+    //checks whether to go down left or go down right
     int left = 0;
     if (get_right(e) == NULL) {
         left = 1;
@@ -95,11 +109,15 @@ void down(FutureEventList* f, Event* e) {
         Event* ell = get_left(get_left(e));
         Event* elr = get_right(get_left(e));
         Event* ep = get_parent(e);
+        //checks whether e is its parent's left
+        //if e is root, is_left will be 2
         int is_left = 2;
         if (ep != NULL) {
             is_left = e == get_left(ep);
         }
         Event* el;
+        //store information
+        //set root in edge case
         if (is_left == 2) {
             el = get_left(f->last);
             f->root = el;
@@ -116,6 +134,7 @@ void down(FutureEventList* f, Event* e) {
         } else {
             er = get_right(get_right(get_parent(e)));
         }
+        //sets fields
         set_parent(e, el);
         set_right(get_parent(e), er);
         set_left(get_parent(e), e);
@@ -136,11 +155,15 @@ void down(FutureEventList* f, Event* e) {
         Event* erl = get_left(get_right(e));
         Event* err = get_right(get_right(e));
         Event* ep = get_parent(e);
+        //checks whether e is its parent's left
+        //if e is root, is_left will be 2
         int is_left = 2;
         if (ep != NULL) {
             is_left = e == get_left(ep);
         }
         Event* el;
+        //store information
+        //set root in edge case
         if (is_left == 2) {
             el = get_left(f->last);
         } else if (is_left) {
@@ -157,6 +180,7 @@ void down(FutureEventList* f, Event* e) {
         } else {
             er = get_right(get_right(get_parent(e)));
         }
+        //sets fields
         set_parent(e, er);
         set_right(get_parent(e), e);
         set_left(get_parent(e), el);
@@ -177,6 +201,7 @@ void down(FutureEventList* f, Event* e) {
     down(f, e);
 }
 
+/*sets the last item in heap using binary notation*/
 int set_last(FutureEventList* f) {
     if (f == NULL) {
         return 1;
@@ -194,6 +219,7 @@ int set_last(FutureEventList* f) {
     return 0;
 }
 
+/*finds the parent of the last item in heap using binary notation*/
 Event* find_par(FutureEventList* f) {
     if (f == NULL) {
         return NULL;
@@ -210,6 +236,7 @@ Event* find_par(FutureEventList* f) {
     return temp;
 }
 
+/*creates a new FutureEventList pointer*/
 FutureEventList* new_FutureEventList() {
     FutureEventList* opt = malloc(sizeof(FutureEventList));
     if (opt == NULL) {
@@ -222,6 +249,7 @@ FutureEventList* new_FutureEventList() {
     return opt;
 }
 
+/*schedules an event*/
 int schedule(FutureEventList* f, Event* e) {
     if (f == NULL || e == NULL) {
         return 1;
@@ -233,19 +261,23 @@ int schedule(FutureEventList* f, Event* e) {
     } else {
         f->cnt++;
         Event* par = find_par(f);
+        //puts the new event to the "last" position
         set_parent(e, par);
         if (get_left(par) == NULL) {
             set_left(par, e);
         } else {
             set_right(par, e);
         }
+        //heapify up
         up(f, e);
+        //resets the last item
         set_last(f);
     }
 
     return 0;
 }
 
+/*removes an event*/
 int remove_event(FutureEventList* f) {
     if (f == NULL || f->root == NULL) {
         return 1;
@@ -257,6 +289,7 @@ int remove_event(FutureEventList* f) {
         f->cnt = 0;
         return 0;
     }
+    //resets the connections of the last
     Event* rl = get_left(f->root);
     Event* rr = get_right(f->root);
 
@@ -276,9 +309,12 @@ int remove_event(FutureEventList* f) {
         set_left(f->last, NULL);
     }
     set_parent(f->last, NULL);
+    //frees the root
     free(f->root);
+    //heapify down
     down(f, f->last);
     f->cnt--;
+    //resets last
     set_last(f);
     return 0;
 }

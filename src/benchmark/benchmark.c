@@ -23,13 +23,14 @@ int main(int argc, char** argv) {
     FutureEventList* f = new_FutureEventList();
     srand(time(NULL));
     double ts = 0;
+    /*initialize both FEL's*/
     for (int i = 0; i < init_size; i++) {
         schedule(f, new_Event(ts, 1, NULL));
         Schedule(ts, NULL);
         ts += rand_exp(1);
     }
     clock_t start = clock();
-    /*hold operation*/
+    /*hold operation for heap implementation*/
     for (int i = 0; i < 100000; i++) {
         schedule(f, new_Event(get_time_stamp(get_root(f)) + rand_exp(1), 1,
         NULL));
@@ -40,6 +41,7 @@ int main(int argc, char** argv) {
     double t_time = ((double) end - (double) start) / CLOCKS_PER_SEC;
     printf("%d,%lf,", init_size, t_time);
     start = clock();
+    /*hold operation for list implementation*/
     for (int i = 0; i < 100000; i++) {
         Event* e = Remove();
         Schedule(get_time(e) + rand_exp(1), NULL);

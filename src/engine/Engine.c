@@ -9,6 +9,7 @@ struct Engine {
     FutureEventList* list;
 };
 
+/*creates a new engine and sets its duration*/
 Engine* new_Engine(double duration) {
     Engine* opt = malloc(sizeof(Engine));
     if (opt == NULL) {
@@ -25,6 +26,8 @@ Engine* new_Engine(double duration) {
     return opt;
 }
 
+/*schedules an event using the information provided. When timestamp is beyond
+duration, the event gets rejected*/
 int schedule_event(Engine* engine, double time_stamp, int type, void* data) {
     if (time_stamp > engine->duration) {
         return 1;
@@ -35,6 +38,7 @@ int schedule_event(Engine* engine, double time_stamp, int type, void* data) {
     }
 }
 
+/*starts execution*/
 int main_loop(Engine* e) {
     while (get_cnt(e->list) > 0) {
         e->time_now = get_time_stamp(get_root(e->list));
@@ -57,6 +61,7 @@ int free_Engine(Engine* e) {
     return 0;
 }
 
+//random number generators
 double rand_unif(double lb, double ub) {
     double n = ((double) rand()) / ((double) RAND_MAX);
     return lb + n * (ub - lb);

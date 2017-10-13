@@ -11,6 +11,7 @@ struct Event {
     void* data;
 };
 
+//creates a new event and sets its corresponding fields
 Event* new_Event(double time_stamp, int type, void* data) {
     Event* opt = malloc(sizeof(Event));
     if (opt == NULL) {
