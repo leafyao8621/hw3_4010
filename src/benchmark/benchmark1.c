@@ -10,6 +10,11 @@ double rand_exp(double mean) {
     return -mean * (log(1 - n));
 }
 
+double rand_unif(double lb, double ub) {
+    double n = ((double) rand()) / ((double) RAND_MAX);
+    return lb + n * (ub - lb);
+}
+
 int main(int argc, char** argv) {
     if (argc < 2) {
         puts("Not enough args");
@@ -22,11 +27,10 @@ int main(int argc, char** argv) {
     }
     FutureEventList* f = new_FutureEventList();
     srand(time(NULL));
-    double ts = 0;
     for (int i = 0; i < init_size; i++) {
+        double ts = rand_unif(0, 2);
         schedule(f, new_Event(ts, 1, NULL));
         Schedule(ts, NULL);
-        ts += rand_exp(1);
     }
     clock_t start = clock();
     /*hold operation*/

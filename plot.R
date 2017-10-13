@@ -1,0 +1,8 @@
+a = read.csv("benchmark.csv")
+b = read.csv("benchmark1.csv")
+plot(a[,2] ~ a[,1], ylab = "heap", xlab = "size")
+plot(a[,3] ~ a[,1], ylab = "list", xlab = "size")
+matplot(a[,1], cbind(a[,2], a[,3]), col = c("red", "green"), ylab = "avg_runtime * 100000", xlab = "size")
+plot(b[,2] ~ b[,1], ylab = "heap", xlab = "size")
+plot(b[,3] ~ b[,1], ylab = "list", xlab = "size")
+matplot(b[,1], cbind(b[,2], b[,3]), col = c("red", "green"), ylab = "avg_runtime * 100000", xlab = "size")
